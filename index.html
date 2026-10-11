@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    >
+    <meta name="theme-color" content="#1a4d5c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+
+    <title>Wedding Invitation | Rahul &amp; Priya</title>
+
+    <!-- Elegant fonts for the hero text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        /* ================================
+           RESET AND BASE STYLES
+        ================================= */
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+
+            background: #fdfbf7;
+            font-family: sans-serif;
+
+            /* Prevent the browser from bouncing the whole page
+               sideways on iOS — that can break sticky. */
+            overflow-x: hidden;
+            overscroll-behavior-x: none;
+
+            /* Smooth momentum scrolling on iOS */
+            -webkit-overflow-scrolling: touch;
+
+            /* Prevent long-press callouts on images */
+            -webkit-touch-callout: none;
+        }
+
+        /* Fallback for browsers that don't support overflow-x: clip */
+        @supports (overflow: clip) {
+            html,
+            body {
+                overflow-x: clip;
+            }
+        }
+
+        /* ================================
+           DYNAMIC VIEWPORT HEIGHT
+           --vh is set by JS to the real
+           innerHeight. This fixes the iOS
+           address-bar resize jump.
+        ================================= */
+
+        :root {
+            --vh: 1vh;
+        }
+
+        /* ================================
+           SCROLL CONTAINER
+           100vh (real) pinned hero + 100vh scroll
+        ================================= */
+
+        .scroll-container {
+            position: relative;
+            width: 100%;
+
+            /* Fallbacks first, modern last */
+            height: 200vh;
+            height: calc(var(--vh, 1vh) * 200);
+            height: 200dvh;
+
+            margin: 0;
+            padding: 0;
+
+            background: #fdfbf7;
+            z-index: 10;
+        }
+
+        /* ================================
+           STICKY HERO SECTION
+        ================================= */
+
+        .hero-wrapper {
+            position: sticky;
+            position: -webkit-sticky; /* iOS Safari */
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
+            height: 100dvh;
+
+            max-width: calc(100vh * (9 / 16));
+            max-width: calc(var(--vh, 1vh) * 100 * (9 / 16));
+            max-width: calc(100dvh * (9 / 16));
+
+            margin: 0 auto;
+
+            /* Everything is clipped inside */
+            overflow: hidden;
+
+            background: #fff;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.18);
+
+            isolation: isolate;
+
+            /* Prevent horizontal swipe gestures from scrolling the page */
+            touch-action: pan-y;
+        }
+
+        /* ================================
+           HERO IMAGE LAYERS
+        ================================= */
+
+        .layer {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            /* GPU acceleration + no subpixel flicker */
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+
+            pointer-events: none;
+        }
+
+        .layer img {
+            display: block;
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+            object-position: center;
+
+            /* Disable all native image interactions on mobile */
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-touch-callout: none;
+            pointer-events: none;
+        }
+
+        /* Layer stacking order */
+
+        .bg-layer {
+            z-index: 1;
+        }
+
+        /* Back petals – subtle, slower */
+        .petals-layer-back {
+            z-index: 2;
+            opacity: 0.75;
+        }
+
+        /* Front petals – prominent, faster */
+        .petals-layer-front {
+            z-index: 4;
+            opacity: 1;
+        }
+
+        /* Boat layer */
+        .boat-layer {
+            z-index: 6;
+            transform: translate3d(0, 30%, 0);
+        }
+
+        /* The boat is CONTAINED, not cropped */
+        .boat-layer img {
+            object-fit: contain;
+            object-position: bottom center;
+        }
+
+        #hero .hero-top-shade {
+    z-index: 3 !important;
+}
+        /* ================================
+           HERO TEXT GROUP
+        ================================= */
+
+#hero #hero-text {
+    z-index: 5 !important;
+    position: absolute;
+}
+
+        .hero-text {
+            position: absolute;
+            top: clamp(70px, 14vh, 160px);
+            left: 16px;
+            right: 16px;
+
+            z-index: 9999;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: clamp(12px, 2vh, 22px);
+
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* ---- Couple names ---- */
+
+        .hero-names {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            color: #ffffff;
+
+            font-family: "Cormorant Garamond", "Georgia", "Times New Roman", serif;
+            font-weight: 500;
+            font-size: clamp(46px, 9.5vh, 85px);
+            line-height: 1.0;
+            letter-spacing: 0.03em;
+            text-align: center;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.95),
+                0 0 12px rgba(255, 255, 255, 0.75),
+                0 0 26px rgba(255, 255, 255, 0.55),
+                0 0 48px rgba(255, 255, 255, 0.35),
+                0 2px 6px rgba(18, 12, 8, 0.35),
+                0 4px 20px rgba(18, 12, 8, 0.28);
+        }
+
+        .hero-names .name {
+            display: block;
+        }
+
+        .hero-names .ampersand {
+            display: block;
+            margin: 0.02em 0 0.04em;
+
+            color: #f6e6bb;
+            font-family: "Cormorant Garamond", "Georgia", serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: 0.62em;
+            line-height: 1;
+
+            text-shadow:
+                0 0 4px rgba(255, 255, 255, 0.95),
+                0 0 12px rgba(255, 255, 255, 0.7),
+                0 0 26px rgba(255, 255, 255, 0.5),
+                0 0 44px rgba(255, 255, 255, 0.32),
+                0 2px 6px rgba(18, 12, 8, 0.35),
+                0 4px 18px rgba(18, 12, 8, 0.25);
+        }
+
+        /* ---- Divider + date ---- */
+
+        .hero-subtitle {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 1.4vw, 14px);
+
+            color: rgba(255, 255, 255, 0.95);
+
+            font-family: "Montserrat", "Helvetica Neue", sans-serif;
+            font-weight: 400;
+            font-size: clamp(8.5px, 1.55vh, 11px);
+            letter-spacing: 0.32em;
+            text-transform: uppercase;
+            text-align: center;
+
+            text-shadow:
+                0 0 6px rgba(255, 255, 255, 0.7),
+                0 1px 2px rgba(18, 12, 8, 0.4),
+                0 2px 10px rgba(18, 12, 8, 0.25);
+        }
+
+        .hero-subtitle .line {
+            display: block;
+            width: clamp(18px, 4.5vw, 38px);
+            height: 1px;
+
+            background: rgba(255, 255, 255, 0.65);
+        }
+
+        .hero-subtitle .date-text {
+            white-space: nowrap;
+        }
+
+        /* ---- Top shade ---- */
+
+        .hero-top-shade {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300px;
+            z-index: 7;
+
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 14, 12, 0.38),
+                rgba(18, 14, 12, 0.16) 45%,
+                rgba(18, 14, 12, 0.04) 75%,
+                transparent
+            );
+
+            pointer-events: none;
+        }
+
+        /* ================================
+           SECOND SECTION: WEDDING DETAILS
+        ================================= */
+
+        .wedding-details {
+            position: relative;
+            z-index: 20;
+
+            width: 100%;
+            min-height: 100vh;
+            min-height: calc(var(--vh, 1vh) * 100);
+            min-height: 100dvh;
+
+            padding: 80px 20px;
+            padding-left: calc(20px + env(safe-area-inset-left));
+            padding-right: calc(20px + env(safe-area-inset-right));
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
+
+            margin: 0;
+
+            background: #fdfbf7;
+            color: #333;
+            text-align: center;
+            font-family: "Georgia", serif;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wedding-details h2 {
+            margin: 0 0 40px;
+
+            font-family: sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 3px;
+            line-height: 1.6;
+            text-transform: uppercase;
+
+            color: #888;
+        }
+
+        .parents-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .person {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .person h3 {
+            margin: 0 0 15px;
+
+            color: #2c3e50;
+            font-size: 2rem;
+            font-weight: 400;
+            line-height: 1.3;
+        }
+
+        .person p {
+            margin: 0;
+
+            color: #666;
+            font-family: sans-serif;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .ampersand {
+            margin: 10px 0;
+
+            color: #d4af37;
+            font-family: "Georgia", serif;
+            font-size: 3rem;
+            font-style: italic;
+        }
+
+        .wedding-date {
+            width: 60%;
+            max-width: 300px;
+
+            margin-top: 60px;
+            padding-top: 20px;
+
+            border-top: 1px solid #e0e0e0;
+
+            color: #888;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            line-height: 1.8;
+        }
+
+        /* ================================
+           TABLET AND DESKTOP
+        ================================= */
+
+        @media (min-width: 768px) {
+            .parents-container {
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+                gap: 50px;
+            }
+
+            .ampersand {
+                flex-shrink: 0;
+                margin: 15px 10px 0;
+                font-size: 3.5rem;
+            }
+        }
+
+        /* ================================
+           SMALL MOBILE SCREENS
+        ================================= */
+
+        @media (max-width: 380px) {
+            .hero-text {
+                top: clamp(56px, 11vh, 120px);
+                gap: 10px;
+            }
+
+            .hero-names {
+                font-size: clamp(40px, 8vh, 64px);
+                letter-spacing: 0.02em;
+            }
+
+            .hero-subtitle {
+                font-size: 7.5px;
+                letter-spacing: 0.26em;
+            }
+
+            .hero-subtitle .line {
+                width: 16px;
+            }
+
+            .wedding-details {
+                padding: 60px 18px;
+                padding-bottom: calc(60px + env(safe-area-inset-bottom));
+            }
+
+            .wedding-details h2 {
+                font-size: 0.85rem;
+                letter-spacing: 2px;
+            }
+
+            .person h3 {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ================================
+           REDUCED MOTION
+        ================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+            .layer,
+            .hero-text {
+                will-change: auto;
+            }
+
+            .scroll-container {
+                height: 100vh;
+                height: calc(var(--vh, 1vh) * 100);
+                height: 100dvh;
+            }
+        }
+
+        /* ================================
+           LOW-END DEVICE OPTIMIZATION
+           Fewer effects when the browser
+           reports a slow connection/CPU.
+        ================================= */
+
+        @media (update: slow) {
+            .layer,
+            .hero-text {
+                will-change: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =================================
+         HERO SCROLL CONTAINER
+    ================================== -->
+
+    <section class="scroll-container" id="hero-scroll">
+
+        <!-- Sticky hero (everything stays clipped inside) -->
+        <div class="hero-wrapper" id="hero">
+
+            <!-- Layer 1: Pond Background -->
+            <div class="layer bg-layer" id="layer-bg">
+                <img
+                    src="assets/pondbg.png"
+                    alt="Romantic pond background"
+                    fetchpriority="high"
+                    decoding="async"
+                >
+            </div>
+
+            <!-- Layer 2: Floating Petals (Back) -->
+            <div class="layer petals-layer-back" id="layer-petals-back">
+                <img
+                    src="assets/petalsimg.png"
+                    alt=""
+                    decoding="async"
+                >
+            </div>
+
+            <!-- Layer 3: Floating Petals (Front) -->
+            <div class="layer petals-layer-front" id="layer-petals-front">
+                <img
+                    src="assets/petalsimg.png"
+                    alt="Floating flower petals"
+                    decoding="async"
+                >
+            </div>
+
+            <!-- Layer 4: Boat with Couple -->
+            <div class="layer boat-layer" id="layer-boat">
+                <img
+                    src="assets/boatcouple.png"
+                    alt="Bride and groom sitting in a boat"
+                    decoding="async"
+                >
+            </div>
+
+            <!-- Top gradient to improve text readability -->
+            <div class="hero-top-shade" aria-hidden="true"></div>
+
+            <!-- Hero text: names + date -->
+            <div class="hero-text" id="hero-text">
+                <h1 class="hero-names" aria-label="Rahul and Priya">
+                    <span class="name">Rahul</span>
+                    <span class="ampersand">&amp;</span>
+                    <span class="name">Priya</span>
+                </h1>
+
+                <div class="hero-subtitle">
+                    <span class="line" aria-hidden="true"></span>
+                    <span class="date-text">Save the Date · 14 February 2026</span>
+                    <span class="line" aria-hidden="true"></span>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- =================================
+         SECOND SECTION: PARENTS AND DETAILS
+    ================================== -->
+
+    <section class="wedding-details" id="wedding-details">
+
+        <h2>Together with their parents</h2>
+
+        <div class="parents-container">
+
+            <!-- Groom Details -->
+            <div class="person">
+                <h3>Rahul</h3>
+                <p>
+                    Son of<br>
+                    Mr. &amp; Mrs. Sharma
+                </p>
+            </div>
+
+            <!-- Separator -->
+            <div class="ampersand">&amp;</div>
+
+            <!-- Bride Details -->
+            <div class="person">
+                <h3>Priya</h3>
+                <p>
+                    Daughter of<br>
+                    Mr. &amp; Mrs. Patel
+                </p>
+            </div>
+
+        </div>
+
+        <!-- Wedding Date -->
+        <div class="wedding-date">
+            SAVE THE DATE • 14 FEBRUARY 2026
+        </div>
+
+    </section>
+
+    <script>
+        /* =================================
+           VIEWPORT HEIGHT FIX
+           ------------------------------------------------------------
+           iOS Safari's 100vh includes the address bar, which causes
+           content to be cut off. We set --vh to the real innerHeight
+           and update it whenever the viewport changes.
+        ================================= */
+
+        const root = document.documentElement;
+
+        function setViewportHeight() {
+            // visualViewport is the most accurate on iOS
+            const h = (window.visualViewport && window.visualViewport.height)
+                || window.innerHeight
+                || 0;
+
+            if (h > 0) {
+                root.style.setProperty("--vh", (h * 0.01) + "px");
+            }
+        }
+
+        setViewportHeight();
+
+        window.addEventListener("resize", setViewportHeight, { passive: true });
+        window.addEventListener("orientationchange", () => {
+            // iOS reports stale dimensions right after rotation
+            setTimeout(setViewportHeight, 100);
+            setTimeout(setViewportHeight, 300);
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("resize", setViewportHeight, { passive: true });
+            window.visualViewport.addEventListener("scroll", setViewportHeight, { passive: true });
+        }
+
+        /* =================================
+           ELEMENT REFERENCES
+        ================================= */
+
+        const heroScroll      = document.getElementById("hero-scroll");
+        const heroWrapper     = document.getElementById("hero");
+        const heroText        = document.getElementById("hero-text");
+
+        const bgLayer         = document.getElementById("layer-bg");
+        const petalsLayerBack = document.getElementById("layer-petals-back");
+        const petalsLayerFront= document.getElementById("layer-petals-front");
+        const boatLayer       = document.getElementById("layer-boat");
+
+        const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        /* =================================
+           SPRING PHYSICS
+        ================================= */
+
+        function springStep(state, target, dt, omega, zeta) {
+            const f    = 1 + 2 * dt * zeta * omega;
+            const oo   = omega * omega;
+            const hoo  = dt * oo;
+            const hhoo = dt * hoo;
+            const inv  = 1 / (f + hhoo);
+
+            const newValue =
+                (f * state.value + dt * state.velocity + hhoo * target) * inv;
+
+            const newVelocity =
+                (state.velocity + hoo * (target - state.value)) * inv;
+
+            state.value    = newValue;
+            state.velocity = newVelocity;
+        }
+
+        /* =================================
+           SPRING STATE
+        ================================= */
+
+        const progressSpring = {
+            value: 0,
+            velocity: 0,
+            omega: 8.5,
+            zeta: 0.82
+        };
+
+        const mouseXSpring = { value: 0, velocity: 0, omega: 10, zeta: 1.0 };
+        const mouseYSpring = { value: 0, velocity: 0, omega: 10, zeta: 1.0 };
+
+        const gyroXSpring  = { value: 0, velocity: 0, omega: 9,  zeta: 1.0 };
+        const gyroYSpring  = { value: 0, velocity: 0, omega: 9,  zeta: 1.0 };
+
+        let targetProgress = 0;
+        let targetMouseX   = 0;
+        let targetMouseY   = 0;
+        let targetGyroX    = 0;
+        let targetGyroY    = 0;
+
+        /* =================================
+           SCROLL PROGRESS
+        ================================= */
+
+        function updateTargetProgress() {
+            const scrollDistance =
+                heroScroll.offsetHeight - heroWrapper.offsetHeight;
+
+            if (scrollDistance <= 0) {
+                targetProgress = 1;
+                return;
+            }
+
+            const rect = heroScroll.getBoundingClientRect();
+            const distanceScrolled = -rect.top;
+
+            targetProgress = Math.max(
+                0,
+                Math.min(distanceScrolled / scrollDistance, 1)
+            );
+        }
+
+        // Listen on both scroll and visualViewport for iOS reliability
+        window.addEventListener("scroll", updateTargetProgress, { passive: true });
+        window.addEventListener("resize", updateTargetProgress, { passive: true });
+        window.addEventListener("orientationchange", () => {
+            setTimeout(updateTargetProgress, 100);
+            setTimeout(updateTargetProgress, 300);
+        }, { passive: true });
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener("scroll", updateTargetProgress, { passive: true });
+        }
+
+        updateTargetProgress();
+
+        /* =================================
+           MOUSE PARALLAX (DESKTOP)
+        ================================= */
+
+        if (!prefersReducedMotion) {
+            window.addEventListener(
+                "mousemove",
+                (event) => {
+                    const x = (event.clientX / window.innerWidth) * 2 - 1;
+                    const y = (event.clientY / window.innerHeight) * 2 - 1;
+
+                    targetMouseX = x * 18;
+                    targetMouseY = y * 18;
+                },
+                { passive: true }
+            );
+        }
+
+        /* =================================
+           TOUCH PARALLAX (MOBILE)
+           ------------------------------------------------------------
+           Adds subtle parallax on finger drag / tap so mobile users
+           feel the same depth as desktop. Only reacts to single touch.
+        ================================= */
+
+        if (!prefersReducedMotion) {
+            const handleTouch = (event) => {
+                if (!event.touches || event.touches.length === 0) return;
+
+                const touch = event.touches[0];
+                const x = (touch.clientX / window.innerWidth) * 2 - 1;
+                const y = (touch.clientY / window.innerHeight) * 2 - 1;
+
+                targetMouseX = x * 12;
+                targetMouseY = y * 12;
+            };
+
+            window.addEventListener("touchstart", handleTouch, { passive: true });
+            window.addEventListener("touchmove",  handleTouch, { passive: true });
+
+            // Return to centre when the finger lifts
+            window.addEventListener("touchend", () => {
+                targetMouseX = 0;
+                targetMouseY = 0;
+            }, { passive: true });
+        }
+
+        /* =================================
+           GYROSCOPE PARALLAX (MOBILE)
+           ------------------------------------------------------------
+           iOS 13+ needs DeviceOrientationEvent.requestPermission()
+           triggered by a user gesture. We hook the first tap.
+        ================================= */
+
+        if (!prefersReducedMotion) {
+            const handleOrientation = (event) => {
+                const beta  = event.beta  ?? 0;   // front/back tilt
+                const gamma = event.gamma ?? 0;   // left/right tilt
+
+                const nx = Math.max(-1, Math.min(1, gamma / 35));
+                const ny = Math.max(-1, Math.min(1, (beta - 45) / 35));
+
+                targetGyroX = nx * 14;
+                targetGyroY = ny * 14;
+            };
+
+            const attachGyro = () => {
+                window.addEventListener(
+                    "deviceorientation",
+                    handleOrientation,
+                    { passive: true }
+                );
+            };
+
+            if (typeof DeviceOrientationEvent !== "undefined") {
+                if (typeof DeviceOrientationEvent.requestPermission === "function") {
+                    // iOS 13+
+                    const enableGyro = () => {
+                        DeviceOrientationEvent.requestPermission()
+                            .then((state) => {
+                                if (state === "granted") attachGyro();
+                            })
+                            .catch(() => { /* ignore */ });
+
+                        window.removeEventListener("touchend", enableGyro);
+                        window.removeEventListener("click",    enableGyro);
+                    };
+
+                    window.addEventListener("touchend", enableGyro, { once: true });
+                    window.addEventListener("click",    enableGyro, { once: true });
+                } else {
+                    // Android / older iOS
+                    attachGyro();
+                }
+            }
+        }
+
+        /* =================================
+           REDUCED MOTION: STATIC LAYOUT
+        ================================= */
+
+        if (prefersReducedMotion) {
+            bgLayer.style.transform           = "scale(1.12)";
+            petalsLayerBack.style.transform   = "scale(1.1)";
+            petalsLayerFront.style.transform  = "scale(1.15)";
+            boatLayer.style.transform         = "translate3d(0, 0, 0)";
+            heroText.style.transform          = "translate3d(0, 0, 0)";
+        }
+
+        /* =================================
+           ANIMATION LOOP
+        ================================= */
+
+        let lastTime = 0;
+
+        function animate(now) {
+            if (prefersReducedMotion) return;
+
+            if (!lastTime) lastTime = now;
+
+            let dt = (now - lastTime) / 1000;
+            lastTime = now;
+
+            if (dt > 1 / 30) dt = 1 / 30;
+            if (dt <= 0)     dt = 1 / 60;
+
+            /* ---- Advance springs ---- */
+
+            springStep(
+                progressSpring,
+                targetProgress,
+                dt,
+                progressSpring.omega,
+                progressSpring.zeta
+            );
+
+            springStep(mouseXSpring, targetMouseX, dt, mouseXSpring.omega, mouseXSpring.zeta);
+            springStep(mouseYSpring, targetMouseY, dt, mouseYSpring.omega, mouseYSpring.zeta);
+
+            springStep(gyroXSpring, targetGyroX, dt, gyroXSpring.omega, gyroXSpring.zeta);
+            springStep(gyroYSpring, targetGyroY, dt, gyroYSpring.omega, gyroYSpring.zeta);
+
+            /* ---- Smoothed values ---- */
+
+            const p  = progressSpring.value;
+            const mx = mouseXSpring.value + gyroXSpring.value;
+            const my = mouseYSpring.value + gyroYSpring.value;
+
+            /* ---- Scroll offsets (vh) ---- */
+
+            const bgScrollOffset          = p * -2;
+            const petalsBackScrollOffset  = p * -8;
+            const petalsFrontScrollOffset = p * -18;
+            const boatScrollOffset        = (1 - p) * 30 + 5;
+            const textScrollOffset        = p * 14;
+
+            /* ---- Background ---- */
+            bgLayer.style.transform = `
+                translate3d(
+                    ${mx * 0.15}px,
+                    calc(${my * 0.15}px + ${bgScrollOffset}vh),
+                    0
+                ) scale(1.12)
+            `;
+
+            /* ---- Petals Back ---- */
+            petalsLayerBack.style.transform = `
+                translate3d(
+                    ${mx * 0.3}px,
+                    calc(${my * 0.3}px + ${petalsBackScrollOffset}vh),
+                    0
+                ) scale(1.1)
+            `;
+
+            /* ---- Petals Front ---- */
+            petalsLayerFront.style.transform = `
+                translate3d(
+                    ${mx * 0.7}px,
+                    calc(${my * 0.7}px + ${petalsFrontScrollOffset}vh),
+                    0
+                ) scale(1.15)
+            `;
+
+            /* ---- Boat ---- */
+            boatLayer.style.transform = `
+                translate3d(
+                    ${mx * 0.85}px,
+                    calc(${my * 0.3}px + ${boatScrollOffset}vh),
+                    0
+                )
+            `;
+
+            /* ---- Text ---- */
+            heroText.style.transform = `
+                translate3d(
+                    ${mx * 0.35}px,
+                    calc(${my * 0.35}px + ${textScrollOffset}vh),
+                    0
+                )
+            `;
+
+            requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+    </script>
+
+</body>
+</html>
